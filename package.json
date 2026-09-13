@@ -1,0 +1,12 @@
+{
+  "name": "modak-catcher",
+  "version": "1.0.0",
+  "description": "Modak Catcher Game with Local Server & NIAT Campus Leaderboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["game", "ganesh-chaturthi", "niat", "canvas", "leaderboard"],
+  "author": "",
+  "license": "ISC"
+}

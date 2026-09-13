@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎮 Modak Catcher - Ganpati Bappa Morya!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Festive Garland / Toran Header -->
+  <header class="festive-header">
+    <div class="toran-garland">
+      <span class="leaf">🍃</span><span class="marigold">🌼</span><span class="marigold-orange">🏵️</span>
+      <span class="marigold">🌼</span><span class="leaf">🍃</span><span class="marigold-orange">🏵️</span>
+      <span class="marigold">🌼</span><span class="leaf">🍃</span><span class="marigold-orange">🏵️</span>
+      <span class="marigold">🌼</span><span class="leaf">🍃</span>
+    </div>
+    <h1 class="game-title">
+      <span class="om-symbol">ॐ</span> Modak Catcher <span class="om-symbol">ॐ</span>
+    </h1>
+    <p class="subtitle">Help Bal Ganesha catch auspicious modaks for Ganesh Chaturthi!</p>
+  </header>
+
+  <main class="game-container">
+    <!-- Floating Diyas Decor -->
+    <div class="diya diya-left" title="Auspicious Diya">🪔</div>
+    <div class="diya diya-right" title="Auspicious Diya">🪔</div>
+
+    <!-- HUD Stats Bar -->
+    <div class="hud-bar">
+      <div class="hud-card score-card">
+        <span class="hud-label">Score</span>
+        <span class="hud-value" id="score">0</span>
+      </div>
+      <div class="hud-card level-card">
+        <span class="hud-label">Level</span>
+        <span class="hud-value" id="level">1</span>
+      </div>
+      <div class="hud-card lives-card">
+        <span class="hud-label">Lives</span>
+        <div class="lives-icons" id="livesContainer">
+          <span class="life-icon active">🥟</span>
+          <span class="life-icon active">🥟</span>
+          <span class="life-icon active">🥟</span>
+        </div>
+      </div>
+      <div class="hud-card highscore-card">
+        <span class="hud-label">High Score</span>
+        <span class="hud-value" id="highScore">0</span>
+      </div>
+    </div>
+
+    <!-- Canvas Frame -->
+    <div class="canvas-wrapper">
+      <canvas id="gameCanvas" width="460" height="580"></canvas>
+      
+      <!-- Overlay for Start / Pause / Game Over state -->
+      <div id="canvasOverlay" class="canvas-overlay">
+        <div class="overlay-content" id="startScreen">
+          <div class="festive-badge">✨ Shree Ganeshay Namah ✨</div>
+          <h2>Ready to Catch Modaks?</h2>
+          <p>Move Bal Ganesha to catch delicious modaks falling from heaven!</p>
+          <div class="legend-box">
+            <div>🥟 <strong>White Modak:</strong> +1 Point</div>
+            <div>🌟 <strong>Golden Modak:</strong> +5 Points (Rare!)</div>
+            <div>💔 <strong>Miss 3 Modaks:</strong> Game Over</div>
+          </div>
+          <button id="startBtn" class="btn btn-primary glow-btn">Play Game 🪔</button>
+        </div>
+
+        <div class="overlay-content hidden" id="canvasGameOverScreen">
+          <div class="festive-badge">🙏 Ganpati Bappa Morya! 🙏</div>
+          <h2>Game Over!</h2>
+          <p>Your Final Score: <strong id="overlayScoreVal" style="font-size: 22px; color: #d32f2f;">0</strong></p>
+          <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 14px;">
+            <button id="overlayPlayAgainBtn" class="btn btn-primary glow-btn">Play Again 🔄</button>
+            <button id="overlayLeaderboardBtn" class="btn btn-secondary">🏆 Leaderboard</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Devotee Status (shown once registered) -->
+    <div id="activeDevoteeBar" class="active-devotee-bar hidden">
+      <span class="status-dot"></span>
+      <span>Playing as: <strong id="activeDevoteeName">Devotee</strong> (<span id="activeDevoteeNiatId">ID</span>)</span>
+      <button id="switchUserBarBtn" class="mini-text-btn" title="Change Devotee Details" type="button">Change 👤</button>
+    </div>
+
+    <!-- Control Buttons and Audio Bar -->
+    <div class="controls-toolbar">
+      <button id="pauseBtn" class="tool-btn" title="Pause / Resume (P)">⏸️ Pause</button>
+      <button id="musicToggleBtn" class="tool-btn active" title="Toggle Festive Dhol Beats">🥁 Music: ON</button>
+      <button id="sfxToggleBtn" class="tool-btn active" title="Toggle Sound Effects">🔔 SFX: ON</button>
+      <button id="leaderboardBtn" class="tool-btn" title="View Top Scores">🏆 Leaderboard</button>
+    </div>
+
+    <!-- Keyboard / Touch Controls Helper -->
+    <div class="how-to-play">
+      <p><strong>Controls:</strong> Use <strong>← / →</strong> or <strong>A / D</strong> keys. You can also <strong>drag or move your mouse / touch</strong> directly across the screen!</p>
+    </div>
+  </main>
+
+  <!-- Leaderboard & Game Over Modal -->
+  <div id="modalBackdrop" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <button id="modalCloseBtn" class="modal-close" title="Close">&times;</button>
+      
+      <!-- Content for Game Over Screen -->
+      <div id="gameOverView" class="modal-view hidden">
+        <div class="festive-badge">🙏 Ganpati Bappa Morya! 🙏</div>
+        <h2 class="game-over-title">Game Over!</h2>
+        <div class="final-score-box">
+          <p>Your Final Score</p>
+          <div class="final-score-number" id="finalScoreVal">0</div>
+          <p id="newHighScoreBanner" class="high-score-banner hidden">🎉 NEW HIGH SCORE! 🎉</p>
+        </div>
+
+        <!-- If user details are already saved from game 1, details are not required! -->
+        <div id="savedProfileSection" class="saved-profile-card hidden">
+          <div class="profile-header">
+            <span class="profile-icon">🎓</span>
+            <div class="profile-text">
+              <div class="profile-name" id="savedProfileName">Devotee Name</div>
+              <div class="profile-meta">
+                <span class="niat-id-badge" id="savedProfileNiatId">NIAT-ID</span>
+                <span class="campus-tag" id="savedProfileCampus">Campus</span>
+              </div>
+            </div>
+          </div>
+          <p class="auto-save-notice">✨ Offering automatically recorded on local server!</p>
+          <button type="button" id="switchUserBtn" class="switch-user-btn">Switch Devotee / Edit ID 👤</button>
+        </div>
+
+        <!-- Name, NIAT ID & Campus submit form (only required for 1st game or when switching user) -->
+        <form id="saveScoreForm" class="save-score-form">
+          <div class="form-group">
+            <label for="playerNameInput">Devotee / Student Name:</label>
+            <input type="text" id="playerNameInput" maxlength="18" placeholder="e.g. Rahul Sharma" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="playerNiatIdInput">NIAT ID:</label>
+            <input type="text" id="playerNiatIdInput" maxlength="20" placeholder="e.g. NIAT-2024-108" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="playerCampusSelect">Your NIAT Campus:</label>
+            <select id="playerCampusSelect" class="campus-select">
+              <option value="NIAT Greater Noida">NIAT Greater Noida</option>
+              <option value="NIAT Delhi NCR">NIAT Delhi NCR</option>
+              <option value="NIAT Lucknow">NIAT Lucknow</option>
+              <option value="NIAT Pune">NIAT Pune</option>
+              <option value="NIAT Bangalore">NIAT Bangalore</option>
+              <option value="NIAT Hyderabad">NIAT Hyderabad</option>
+              <option value="NIAT Mumbai">NIAT Mumbai</option>
+              <option value="NIAT Kolkata">NIAT Kolkata</option>
+              <option value="NIAT Main Campus">NIAT Main Campus</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Save & Remember Devotee 🏆</button>
+        </form>
+
+        <div class="modal-actions" style="margin-top: 14px;">
+          <button id="playAgainBtn" class="btn btn-primary glow-btn">Play Again 🔄</button>
+          <button id="viewLeaderboardFromGameOverBtn" class="btn btn-secondary">View Leaderboard 📊</button>
+        </div>
+      </div>
+
+      <!-- Content for Leaderboard Screen -->
+      <div id="leaderboardView" class="modal-view">
+        <h2>🏆 NIAT Temple Leaderboard</h2>
+
+        <!-- NIAT Tabs: All Campuses vs My Campus -->
+        <div class="leaderboard-tabs">
+          <button id="tabAllCampuses" class="tab-btn active" type="button">🏛️ NIAT All Campuses</button>
+          <button id="tabMyCampus" class="tab-btn" type="button">🎓 My Campus</button>
+        </div>
+
+        <!-- My Campus Filter Dropdown -->
+        <div id="myCampusSelectorContainer" class="my-campus-bar hidden">
+          <label for="myCampusFilterSelect">My Campus:</label>
+          <select id="myCampusFilterSelect" class="campus-filter-dropdown">
+            <option value="NIAT Greater Noida">NIAT Greater Noida</option>
+            <option value="NIAT Delhi NCR">NIAT Delhi NCR</option>
+            <option value="NIAT Lucknow">NIAT Lucknow</option>
+            <option value="NIAT Pune">NIAT Pune</option>
+            <option value="NIAT Bangalore">NIAT Bangalore</option>
+            <option value="NIAT Hyderabad">NIAT Hyderabad</option>
+            <option value="NIAT Mumbai">NIAT Mumbai</option>
+            <option value="NIAT Kolkata">NIAT Kolkata</option>
+            <option value="NIAT Main Campus">NIAT Main Campus</option>
+          </select>
+        </div>
+
+        <p class="leaderboard-subtitle">Showing all campus records</p>
+
+        <div class="leaderboard-table-container">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Devotee</th>
+                <th>Campus</th>
+                <th>Score</th>
+                <th>Level</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="modal-actions">
+          <button id="leaderboardPlayAgainBtn" class="btn btn-primary glow-btn">Play Again 🔄</button>
+          <button id="clearLeaderboardBtn" class="btn btn-secondary">Clear Records</button>
+          <button id="closeLeaderboardBtn" class="btn btn-secondary">Back to Game</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="game-footer">
+    <p>🌺 Mangal Murti Morya! Created with love for Ganesh Chaturthi 🌺</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

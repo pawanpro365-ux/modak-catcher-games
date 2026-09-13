@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Pawan Kumar",
+    "niatId": "N26HY01A004",
+    "campus": "NIAT Delhi NCR",
+    "score": 47,
+    "level": 4,
+    "date": "13 Sept"
+  },
+  {
+    "name": "Bal Ganesha",
+    "niatId": "NIAT-DEV-001",
+    "campus": "NIAT Main Campus",
+    "score": 45,
+    "level": 5,
+    "date": "Festival Day"
+  },
+  {
+    "name": "Aarav Sharma",
+    "niatId": "NIAT-GN-2024",
+    "campus": "NIAT Greater Noida",
+    "score": 38,
+    "level": 4,
+    "date": "Sep 12"
+  },
+  {
+    "name": "Mooshak",
+    "niatId": "NIAT-DEL-108",
+    "campus": "NIAT Delhi NCR",
+    "score": 28,
+    "level": 3,
+    "date": "Shukla Chaturthi"
+  },
+  {
+    "name": "Priya Singh",
+    "niatId": "NIAT-PUN-042",
+    "campus": "NIAT Pune",
+    "score": 22,
+    "level": 3,
+    "date": "Sep 11"
+  },
+  {
+    "name": "Devotee",
+    "niatId": "NIAT-BLR-019",
+    "campus": "NIAT Bangalore",
+    "score": 14,
+    "level": 2,
+    "date": "Sep 10"
+  },
+  {
+    "name": "Pawan Kumar",
+    "niatId": "N26HY01A004",
+    "campus": "NIAT Delhi NCR",
+    "score": 8,
+    "level": 1,
+    "date": "13 Sept"
+  },
+  {
+    "name": "Pawan Kumar",
+    "niatId": "N26HY01A004",
+    "campus": "NIAT Delhi NCR",
+    "score": 0,
+    "level": 1,
+    "date": "13 Sept"
+  },
+  {
+    "name": "Pawan Kumar",
+    "niatId": "N26HY01A004",
+    "campus": "NIAT Delhi NCR",
+    "score": 0,
+    "level": 1,
+    "date": "13 Sept"
+  }
+]
